@@ -10,13 +10,9 @@ import com.eliasjr.testetap4.databinding.ItemListaBinding
 import com.eliasjr.testetap4.extensions.toFullUrl
 import com.eliasjr.testetap4.interfaces.listenerItens
 import com.eliasjr.testetap4.model.Movie
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_lista.view.*
-import java.util.concurrent.TimeUnit
 
 
 class ListaMovieAdapter(
@@ -49,33 +45,13 @@ class ListaMovieAdapter(
             }
         }
 
-        var subs: Disposable? = null
 
         fun bind(movie: Movie) {
-
             binding.movie = movie
             binding.executePendingBindings()
-
-            val voteAverage = movie.popularity.toInt()
-
-            val cont = Observable.intervalRange(
-                1,
-                voteAverage.toLong(),
-                0,
-                100,
-                TimeUnit.MICROSECONDS,
-                AndroidSchedulers.mainThread()
-            )
-                .subscribeOn(Schedulers.io())
-
-
+            itemView.item_lista_movie_progress_vote_average.text = movie.popularity.toString()
             loadImage(itemView.item_lista_movie_img, movie.poster_path.toFullUrl())
 
-            subs = cont.subscribe {
-                itemView.item_lista_movie_progressBar.progress = it.toInt()
-                itemView.item_lista_movie_progress_vote_average.text = it.toString()
-            }
-            disposer.add(subs!!)
         }
     }
 

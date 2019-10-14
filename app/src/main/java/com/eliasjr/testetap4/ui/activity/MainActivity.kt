@@ -1,6 +1,7 @@
 package com.eliasjr.testetap4.ui.activity
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -11,6 +12,7 @@ import com.eliasjr.testetap4.repositorios.MovieRepository
 import com.eliasjr.testetap4.ui.fragments.MainFragment
 import com.eliasjr.testetap4.ui.fragments.SemConexaoFragment
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -93,6 +95,7 @@ class MainActivity : AppCompatActivity() {
     private fun semConexao() {
         addFragment(SemConexaoFragment(), false, "")
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

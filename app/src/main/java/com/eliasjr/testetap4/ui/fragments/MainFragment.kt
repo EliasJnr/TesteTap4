@@ -2,10 +2,8 @@ package com.eliasjr.testetap4.ui.fragments
 
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 
 import com.eliasjr.testetap4.R
@@ -21,7 +19,7 @@ import javax.inject.Inject
 class MainFragment : Fragment() {
 
     lateinit var viewModel: MovieViewModel
-    val disposer = CompositeDisposable()
+    private val disposer = CompositeDisposable()
     lateinit var adapter: ListaMovieAdapter
 
     var listMovies: MutableList<Movie> = mutableListOf()
@@ -37,6 +35,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         viewModel = ViewModelProviders.of(requireActivity()).get(MovieViewModel::class.java)
         view.recylerListMovie.setHasFixedSize(false)
@@ -62,8 +61,15 @@ class MainFragment : Fragment() {
 
         disposer.add(subs)
 
+
         return view
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+  
 
 }
