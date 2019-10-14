@@ -1,6 +1,7 @@
 package com.eliasjr.testetap4.ui.fragments
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import com.eliasjr.testetap4.R
 import com.eliasjr.testetap4.dagger.MainApplication
 import com.eliasjr.testetap4.model.Movie
 import com.eliasjr.testetap4.repositorios.MovieRepository
+import com.eliasjr.testetap4.ui.activity.DetalhesActivity
 import com.eliasjr.testetap4.ui.adapter.ListaMovieAdapter
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -43,7 +45,7 @@ class MainFragment : Fragment() {
         adapter = ListaMovieAdapter(listMovies)
         adapter.onItemClick = { movie ->
             movie?.let { movieNotNull ->
-                //vaiParaDetalhes(movieNotNull)
+                vaiParaDetalhes(movieNotNull)
             }
         }
 
@@ -65,11 +67,12 @@ class MainFragment : Fragment() {
         return view
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
+    fun vaiParaDetalhes(movie: Movie) {
+        val intent = Intent(requireContext(), DetalhesActivity::class.java)
+        intent.putExtra("movie", movie)
+        startActivity(intent)
+    }
   
 
 }
