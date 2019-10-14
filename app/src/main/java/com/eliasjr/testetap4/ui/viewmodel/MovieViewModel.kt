@@ -7,4 +7,6 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MovieViewModel : ViewModel() {
     val listMoviesTopRated = BehaviorSubject.create<List<Movie>>()
+    val movieDetails = BehaviorSubject.create<Movie>()
+    val refresh = BehaviorSubject.create<Boolean>()
 }

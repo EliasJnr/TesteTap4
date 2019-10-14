@@ -9,6 +9,7 @@ import com.eliasjr.testetap4.dagger.MainApplication
 import com.eliasjr.testetap4.model.Movie
 import com.eliasjr.testetap4.repositorios.MovieRepository
 import com.eliasjr.testetap4.ui.fragments.MainFragment
+import com.eliasjr.testetap4.ui.fragments.MovieDetailsFragment
 import com.eliasjr.testetap4.ui.fragments.NoConnectionFragment
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
 import io.reactivex.Single
@@ -16,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiConsumer
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val disposer = CompositeDisposable()
 
     private val mainFragment = MainFragment()
+    private val detailsFragment = MovieDetailsFragment()
 
     private lateinit var viewModel: MovieViewModel
 
@@ -40,11 +41,17 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
         syncsDice()
-        swipeRefreshAction()
+
+        disposer.add(viewModel.refresh.subscribe {
+            syncsDice()
+        })
+
+        disposer.add(viewModel.movieDetails.subscribe {
+            addFragment(detailsFragment, true, "2")
+        })
 
         addFragment(mainFragment, false, "0")
     }
-
 
     private fun addFragment(fragment: Fragment, addToBackStack: Boolean, tag: String) {
         val manager = supportFragmentManager
@@ -76,15 +83,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun syncConsumer(): BiConsumer<List<Movie>?, Throwable?> {
         return BiConsumer { list, error ->
-            main_swipe.isRefreshing = false
-            list?.let { viewModel.listMoviesTopRated.onNext(it) }
+            list?.let {
+                viewModel.listMoviesTopRated.onNext(it)
+            }
             error?.let { noConnection() }
-        }
-    }
-
-    private fun swipeRefreshAction() {
-        main_swipe.setOnRefreshListener {
-            syncsDice()
         }
     }
 

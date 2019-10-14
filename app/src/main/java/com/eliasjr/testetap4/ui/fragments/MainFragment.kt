@@ -1,7 +1,6 @@
 package com.eliasjr.testetap4.ui.fragments
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import com.eliasjr.testetap4.R
 import com.eliasjr.testetap4.dagger.MainApplication
 import com.eliasjr.testetap4.model.Movie
 import com.eliasjr.testetap4.repositorios.MovieRepository
-import com.eliasjr.testetap4.ui.activity.DetailsActivity
 import com.eliasjr.testetap4.ui.adapter.ListMovieAdapter
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -45,7 +43,7 @@ class MainFragment : Fragment() {
         adapter = ListMovieAdapter(listMovies)
         adapter.onItemClick = { movie ->
             movie?.let { movieNotNull ->
-                startDetailsActivity(movieNotNull)
+                viewModel.movieDetails.onNext(movieNotNull)
             }
         }
 
@@ -54,24 +52,19 @@ class MainFragment : Fragment() {
         adapter.items = listMovies
         adapter.notifyDataSetChanged()
 
-        val subs = viewModel.listMoviesTopRated
+        disposer.add(viewModel.listMoviesTopRated
             .subscribe {
                 listMovies = it.toMutableList()
                 adapter.items = listMovies
+                view.main_swipe.isRefreshing = false
                 adapter.notifyDataSetChanged()
-            }
+            })
 
-        disposer.add(subs)
-
+        view.main_swipe.setOnRefreshListener {
+            viewModel.refresh.onNext(true)
+        }
 
         return view
-    }
-
-
-    private fun startDetailsActivity(movie: Movie) {
-        val intent = Intent(requireContext(), DetailsActivity::class.java)
-        intent.putExtra("movie", movie)
-        startActivity(intent)
     }
 
 
