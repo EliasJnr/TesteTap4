@@ -24,9 +24,9 @@ open class NetModule {
             .setLenient()
             .create()
 
-            val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BODY
-            httpClient.addInterceptor(logging)
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
+        httpClient.addInterceptor(logging)
 
         return Retrofit.Builder()
             .baseUrl(apiUrl)
@@ -35,7 +35,6 @@ open class NetModule {
             .client(httpClient.build())
             .build()
     }
-
 
 
     @Provides

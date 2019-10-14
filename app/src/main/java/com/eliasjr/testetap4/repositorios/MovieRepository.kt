@@ -12,9 +12,9 @@ class MovieRepository @Inject constructor(
 ) {
     fun getMoviesTopRated() = API.getListMoviesTopRated()
 
-    fun addOrUpdateMovieInterno(movies: List<Movie>): Completable {
+    fun addOrUpdateMovieIntern(movies: List<Movie>): Completable {
         return Completable.fromAction { movieDAO.insertOrUpdateMovies(movies) }
     }
 
-    fun getMoviesInterno() = movieDAO.getListMovies()
+    fun getMoviesIntern() = movieDAO.getListMovies()
 }

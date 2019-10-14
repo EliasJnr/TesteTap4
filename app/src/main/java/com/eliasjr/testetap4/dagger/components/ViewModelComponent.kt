@@ -5,6 +5,5 @@ import dagger.Subcomponent
 
 @Subcomponent
 interface ViewModelComponent {
-
     fun vmInject(viewModel: MovieViewModel)
 }

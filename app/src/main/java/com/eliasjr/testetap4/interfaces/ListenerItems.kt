@@ -2,8 +2,7 @@ package com.eliasjr.testetap4.interfaces
 
 import com.eliasjr.testetap4.model.Movie
 
-interface listenerItens {
-
+interface ListenerItems {
     var items: MutableList<Movie>
     fun notifyDataSetChanged()
 }

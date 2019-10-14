@@ -24,7 +24,7 @@ class MainApplication : Application() {
     }
 
 
-    fun setComponent(component: AppComponent) {
+   private fun setComponent(component: AppComponent) {
         appComponent = component
         viewModelComponent = appComponent.viewModelComponent()
         fragmentComponent = appComponent.fragmentComponent()

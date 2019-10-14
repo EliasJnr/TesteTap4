@@ -3,16 +3,17 @@ package com.eliasjr.testetap4.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-
 import com.eliasjr.testetap4.R
 import com.eliasjr.testetap4.dagger.MainApplication
 import com.eliasjr.testetap4.model.Movie
 import com.eliasjr.testetap4.repositorios.MovieRepository
-import com.eliasjr.testetap4.ui.activity.DetalhesActivity
-import com.eliasjr.testetap4.ui.adapter.ListaMovieAdapter
+import com.eliasjr.testetap4.ui.activity.DetailsActivity
+import com.eliasjr.testetap4.ui.adapter.ListMovieAdapter
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_main.view.*
@@ -20,11 +21,11 @@ import javax.inject.Inject
 
 class MainFragment : Fragment() {
 
-    lateinit var viewModel: MovieViewModel
+    private lateinit var viewModel: MovieViewModel
     private val disposer = CompositeDisposable()
-    lateinit var adapter: ListaMovieAdapter
+    private lateinit var adapter: ListMovieAdapter
 
-    var listMovies: MutableList<Movie> = mutableListOf()
+    private var listMovies: MutableList<Movie> = mutableListOf()
 
     @Inject
     lateinit var movieRepo: MovieRepository
@@ -37,15 +38,14 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         viewModel = ViewModelProviders.of(requireActivity()).get(MovieViewModel::class.java)
         view.recylerListMovie.setHasFixedSize(false)
 
-        adapter = ListaMovieAdapter(listMovies)
+        adapter = ListMovieAdapter(listMovies)
         adapter.onItemClick = { movie ->
             movie?.let { movieNotNull ->
-                vaiParaDetalhes(movieNotNull)
+                startDetailsActivity(movieNotNull)
             }
         }
 
@@ -68,11 +68,11 @@ class MainFragment : Fragment() {
     }
 
 
-    fun vaiParaDetalhes(movie: Movie) {
-        val intent = Intent(requireContext(), DetalhesActivity::class.java)
+    private fun startDetailsActivity(movie: Movie) {
+        val intent = Intent(requireContext(), DetailsActivity::class.java)
         intent.putExtra("movie", movie)
         startActivity(intent)
     }
-  
+
 
 }

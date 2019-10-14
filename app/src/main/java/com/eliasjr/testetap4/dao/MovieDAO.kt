@@ -13,6 +13,6 @@ interface MovieDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdateMovies(movies: List<Movie>)
 
-    @Query("SELECT * FROM movie ")
+    @Query("SELECT * FROM movie")
     fun getListMovies(): Single<List<Movie>>
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:paddingTop="100dp"
-    tools:context=".ui.fragments.SemConexaoFragment"
+    tools:context=".ui.fragments.NoConnectionFragment"
     android:layout_height="match_parent">
 
 

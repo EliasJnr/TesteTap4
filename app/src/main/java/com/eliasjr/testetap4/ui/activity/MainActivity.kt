@@ -1,7 +1,6 @@
 package com.eliasjr.testetap4.ui.activity
 
 import android.os.Bundle
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -10,9 +9,8 @@ import com.eliasjr.testetap4.dagger.MainApplication
 import com.eliasjr.testetap4.model.Movie
 import com.eliasjr.testetap4.repositorios.MovieRepository
 import com.eliasjr.testetap4.ui.fragments.MainFragment
-import com.eliasjr.testetap4.ui.fragments.SemConexaoFragment
+import com.eliasjr.testetap4.ui.fragments.NoConnectionFragment
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
-import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,11 +21,11 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    val disposer = CompositeDisposable()
+    private val disposer = CompositeDisposable()
 
     private val mainFragment = MainFragment()
 
-    lateinit var viewModel: MovieViewModel
+    private lateinit var viewModel: MovieViewModel
 
     @Inject
     lateinit var movieRepo: MovieRepository
@@ -41,8 +39,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
-        sincronizaDados()
-
+        syncsDice()
         swipeRefreshAction()
 
         addFragment(mainFragment, false, "0")
@@ -60,40 +57,40 @@ class MainActivity : AppCompatActivity() {
         ft.commitAllowingStateLoss()
     }
 
-    fun sincronizaDados() {
-        val subs = sincronizaListaMovie()
+    private fun syncsDice() {
+        val subs = syncsListMovie()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(sincronizaConsumer())
+            .subscribe(syncConsumer())
         disposer.add(subs)
     }
 
-    fun sincronizaListaMovie(): Single<List<Movie>> {
-        return movieRepo.getMoviesTopRated() // Requisição p/ servidor
+    private fun syncsListMovie(): Single<List<Movie>> {
+        return movieRepo.getMoviesTopRated()
             .map { resp -> resp.results }
-            .flatMap { lista ->
-                movieRepo.addOrUpdateMovieInterno(lista)
-                    .andThen(movieRepo.getMoviesInterno()) // Lista vinda do banco interno após completar a cadeia
+            .flatMap { list ->
+                movieRepo.addOrUpdateMovieIntern(list)
+                    .andThen(movieRepo.getMoviesIntern())
             }
     }
 
-    fun sincronizaConsumer(): BiConsumer<List<Movie>?, Throwable?> {
-        return BiConsumer { lista, erro ->
+    private fun syncConsumer(): BiConsumer<List<Movie>?, Throwable?> {
+        return BiConsumer { list, error ->
             main_swipe.isRefreshing = false
-            lista?.let { viewModel.listMoviesTopRated.onNext(it) }
-            erro?.let { semConexao() }
+            list?.let { viewModel.listMoviesTopRated.onNext(it) }
+            error?.let { noConnection() }
         }
     }
 
     private fun swipeRefreshAction() {
         main_swipe.setOnRefreshListener {
-            sincronizaDados()
+            syncsDice()
         }
     }
 
 
-    private fun semConexao() {
-        addFragment(SemConexaoFragment(), false, "")
+    private fun noConnection() {
+        addFragment(NoConnectionFragment(), true, "1")
     }
 
 

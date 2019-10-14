@@ -8,16 +8,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.eliasjr.testetap4.databinding.ItemListaBinding
 import com.eliasjr.testetap4.extensions.toFullUrl
-import com.eliasjr.testetap4.interfaces.listenerItens
+import com.eliasjr.testetap4.interfaces.ListenerItems
 import com.eliasjr.testetap4.model.Movie
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.item_lista.view.*
 
 
-class ListaMovieAdapter(
+class ListMovieAdapter(
     override var items: MutableList<Movie>
-) : RecyclerView.Adapter<ListaMovieAdapter.ViewHolder>(), listenerItens {
+) : RecyclerView.Adapter<ListMovieAdapter.ViewHolder>(), ListenerItems {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +33,6 @@ class ListaMovieAdapter(
     }
 
     var onItemClick: (Movie?) -> Unit = {}
-    private val disposer = CompositeDisposable()
 
     inner class ViewHolder(private val binding: ItemListaBinding) :
         RecyclerView.ViewHolder(binding.root) {
