@@ -32,7 +32,6 @@ class MovieDetailsFragment : Fragment() {
         MainApplication.fragmentComponent.detailsFragInject(this)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,7 +44,7 @@ class MovieDetailsFragment : Fragment() {
             .subscribe {
 
                 Glide.with(view.img_post.context)
-                    .load(it.backdrop_path.toUrlImage())
+                    .load(it.backdropPath.toUrlImage())
                     .apply(RequestOptions().autoClone())
                     .into(view.img_post)
 
@@ -60,9 +59,7 @@ class MovieDetailsFragment : Fragment() {
                             view.tvHomePage.text = res["homepage"].toString()
                         }
                     })
-
             })
-
         return view
     }
 

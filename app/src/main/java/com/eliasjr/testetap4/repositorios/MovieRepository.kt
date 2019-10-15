@@ -7,10 +7,10 @@ import io.reactivex.Completable
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(
-    private val API: MovieAPI,
+    private val movieAPI: MovieAPI,
     private val movieDAO: MovieDAO
 ) {
-    fun getMoviesTopRated() = API.getListMoviesTopRated()
+    fun getMoviesTopRated() = movieAPI.getListMoviesTopRated()
 
     fun addOrUpdateMovieIntern(movies: List<Movie>): Completable {
         return Completable.fromAction { movieDAO.insertOrUpdateMovies(movies) }
@@ -18,5 +18,5 @@ class MovieRepository @Inject constructor(
 
     fun getMoviesIntern() = movieDAO.getListMovies()
 
-    fun getDetailsMovie(movieId: Int) = API.getDetailsMovie(movieId)
+    fun getDetailsMovie(movieId: Int) = movieAPI.getDetailsMovie(movieId)
 }
