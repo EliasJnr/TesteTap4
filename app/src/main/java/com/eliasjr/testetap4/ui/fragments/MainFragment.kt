@@ -10,12 +10,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.eliasjr.testetap4.R
 import com.eliasjr.testetap4.dagger.MainApplication
 import com.eliasjr.testetap4.model.Movie
-import com.eliasjr.testetap4.repositorios.MovieRepository
 import com.eliasjr.testetap4.ui.adapter.ListMovieAdapter
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_main.view.*
-import javax.inject.Inject
 
 class MainFragment : Fragment() {
 
@@ -25,8 +23,6 @@ class MainFragment : Fragment() {
 
     private var listMovies: MutableList<Movie> = mutableListOf()
 
-    @Inject
-    lateinit var movieRepo: MovieRepository
 
     init {
         MainApplication.fragmentComponent.mainFragInject(this)

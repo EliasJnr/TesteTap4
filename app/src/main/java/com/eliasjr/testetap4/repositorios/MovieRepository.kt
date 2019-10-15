@@ -17,4 +17,6 @@ class MovieRepository @Inject constructor(
     }
 
     fun getMoviesIntern() = movieDAO.getListMovies()
+
+    fun getDetailsMovie(movieId: Int) = API.getDetailsMovie(movieId)
 }

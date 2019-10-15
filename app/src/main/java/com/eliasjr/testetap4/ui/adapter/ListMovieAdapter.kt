@@ -2,12 +2,12 @@ package com.eliasjr.testetap4.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.eliasjr.testetap4.R
 import com.eliasjr.testetap4.databinding.ItemListaBinding
-import com.eliasjr.testetap4.extensions.toFullUrl
+import com.eliasjr.testetap4.extensions.toUrlImage
 import com.eliasjr.testetap4.interfaces.ListenerItems
 import com.eliasjr.testetap4.model.Movie
 import kotlinx.android.synthetic.main.item_lista.view.*
@@ -47,14 +47,13 @@ class ListMovieAdapter(
             binding.movie = movie
             binding.executePendingBindings()
             itemView.item_lista_movie_progress_vote_average.text = movie.popularity.toString()
-            loadImage(itemView.item_lista_movie_img, movie.poster_path.toFullUrl())
+            Glide.with(itemView.item_lista_movie_img.context)
+                .load(movie.poster_path.toUrlImage())
+                .apply(RequestOptions().autoClone())
+                .placeholder(R.drawable.circular_progress_bar)
+                .into(itemView.item_lista_movie_img)
 
         }
     }
 
-    fun loadImage(view: ImageView, imageUrl: String) {
-        Glide.with(view.context)
-            .load(imageUrl).apply(RequestOptions().autoClone())
-            .into(view)
-    }
 }
