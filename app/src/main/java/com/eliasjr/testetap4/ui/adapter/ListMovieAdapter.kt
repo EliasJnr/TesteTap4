@@ -45,7 +45,6 @@ class ListMovieAdapter(
 
         fun bind(movie: Movie) {
             binding.movie = movie
-
             itemView.item_lista_movie_progress_vote_average.text = movie.popularity.toString()
             val previewOverview = movie.overview.take(50) + itemView.context.resources.getString(R.string.ret)
             itemView.item_lista_movie_preview_overview.text = previewOverview

@@ -15,7 +15,6 @@ import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiConsumer
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -68,7 +67,12 @@ class MainActivity : AppCompatActivity() {
         val subs = syncsListMovie()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(syncConsumer())
+            .subscribe { list, error ->
+                list?.let {
+                    viewModel.listMoviesTopRated.onNext(it)
+                }
+                error?.let { noConnection() }
+            }
         disposer.add(subs)
     }
 
@@ -79,15 +83,6 @@ class MainActivity : AppCompatActivity() {
                 movieRepo.addOrUpdateMovieIntern(list)
                     .andThen(movieRepo.getMoviesIntern())
             }
-    }
-
-    private fun syncConsumer(): BiConsumer<List<Movie>?, Throwable?> {
-        return BiConsumer { list, error ->
-            list?.let {
-                viewModel.listMoviesTopRated.onNext(it)
-            }
-            error?.let { noConnection() }
-        }
     }
 
 

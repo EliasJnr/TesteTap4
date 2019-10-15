@@ -24,7 +24,6 @@ class MovieDetailsFragment : Fragment() {
 
     private lateinit var viewModel: MovieViewModel
     private val disposer = CompositeDisposable()
-    lateinit var details: Any
 
     @Inject
     lateinit var movieRepo: MovieRepository
@@ -53,24 +52,18 @@ class MovieDetailsFragment : Fragment() {
                 view.tvOverview.text = it.overview
                 view.tvTitle.text = it.title
 
-                bind(view, it.id)
+                disposer.add(movieRepo.getDetailsMovie(it.id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { res ->
+                        res?.let {
+                            view.tvHomePage.text = res["homepage"].toString()
+                        }
+                    })
 
             })
 
         return view
-    }
-
-    private fun bind(view: View, id: Int) {
-        disposer.add(movieRepo.getDetailsMovie(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { res, error ->
-                res?.let {
-                    view.tvHomePage.text = res["homepage"].toString()
-
-                }
-                error?.let { }
-            })
     }
 
     override fun onDestroy() {
