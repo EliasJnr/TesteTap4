@@ -53,9 +53,6 @@ class MovieDetailsFragment : Fragment() {
                 view.tvOverview.text = it.overview
                 view.tvTitle.text = it.title
 
-
-
-
                 bind(view, it.id)
 
             })
@@ -70,6 +67,7 @@ class MovieDetailsFragment : Fragment() {
             .subscribe { res, error ->
                 res?.let {
                     view.tvHomePage.text = res["homepage"].toString()
+
                 }
                 error?.let { }
             })
