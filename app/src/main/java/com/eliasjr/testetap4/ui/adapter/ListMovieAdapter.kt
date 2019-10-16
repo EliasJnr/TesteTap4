@@ -50,7 +50,7 @@ class ListMovieAdapter(
             itemView.item_lista_movie_preview_overview.text = previewOverview
             binding.executePendingBindings()
             Glide.with(itemView.item_lista_movie_img.context)
-                .load(movie.posterPath.toUrlImage())
+                .load(movie.poster_path.toUrlImage())
                 .apply(RequestOptions().autoClone())
                 .placeholder(R.drawable.circular_progress_bar)
                 .into(itemView.item_lista_movie_img)

@@ -44,7 +44,7 @@ class MovieDetailsFragment : Fragment() {
             .subscribe {
 
                 Glide.with(view.img_post.context)
-                    .load(it.backdropPath.toUrlImage())
+                    .load(it.backdrop_path.toUrlImage())
                     .apply(RequestOptions().autoClone())
                     .into(view.img_post)
 
