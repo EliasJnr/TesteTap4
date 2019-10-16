@@ -47,16 +47,16 @@ class MainActivity : AppCompatActivity() {
         })
 
         disposer.add(viewModel.movieDetails.subscribe {
-            addFragment(detailsFragment, true, "2")
+            addFragment(detailsFragment, true, it.id)
         })
 
-        addFragment(mainFragment, false, "0")
+        addFragment(mainFragment, false, null)
     }
 
-    private fun addFragment(fragment: Fragment, addToBackStack: Boolean, tag: String) {
+    private fun addFragment(fragment: Fragment, addToBackStack: Boolean, id: Int?) {
         val manager = supportFragmentManager
         val ft = manager.beginTransaction()
-
+        val tag = "android:switcher:${fragment.id}:${id}"
         if (addToBackStack) {
             ft.addToBackStack(tag)
         }
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun noConnection() {
-        addFragment(NoConnectionFragment(), true, "1")
+        addFragment(NoConnectionFragment(), true, null)
     }
 
 

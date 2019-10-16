@@ -14,10 +14,12 @@ import com.eliasjr.testetap4.dagger.MainApplication
 import com.eliasjr.testetap4.extensions.toUrlImage
 import com.eliasjr.testetap4.repositorios.MovieRepository
 import com.eliasjr.testetap4.ui.viewmodel.MovieViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_movie_details.view.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MovieDetailsFragment : Fragment() {
@@ -31,6 +33,7 @@ class MovieDetailsFragment : Fragment() {
     init {
         MainApplication.fragmentComponent.detailsFragInject(this)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,12 +54,24 @@ class MovieDetailsFragment : Fragment() {
                 view.tvOverview.text = it.overview
                 view.tvTitle.text = it.title
 
+                Observable.intervalRange(
+                    1,
+                    it.popularity.toLong(),
+                    0,
+                    100,
+                    TimeUnit.MICROSECONDS,
+                    AndroidSchedulers.mainThread()
+                ).subscribeOn(Schedulers.io()).subscribe {
+                    view.progressBar.progress = it.toInt()
+                    view.tvPercent.text = "$it%"
+                }
+
                 disposer.add(movieRepo.getDetailsMovie(it.id)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { res ->
                         res?.let {
-                            view.tvHomePage.text = res["homepage"].toString()
+
                         }
                     })
             })
